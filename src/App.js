@@ -39,13 +39,31 @@ class Grid extends Component {
   }
 }
 
+class NameForm extends Component {
+
+  render() {
+    return (
+      <div>
+        <label>
+          Player {this.props.playerNo}'s name: 
+          <input type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
+          <input type="button" onClick={() => this.props.action()} />
+        </label>
+      </div>
+    );
+  }
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       marks: new Array(9).fill(null),
       xTurn: true,
-      initialized: false
+      initialized: false,
+      name: "",
+      names: {x: null, o: null},
+      currentInputID: 1
     };
   }
 
@@ -84,26 +102,38 @@ class App extends Component {
   }
 
   parseForm() {
-    return;
+    var newNames;
+    if (this.state.currentInputID === 1) {
+      newNames = {
+        names: {x: this.state.name},
+        currentInputID: this.state.currentInputID + 1,
+        name: ""
+      };
+    } else if (this.state.currentInputID === 2) {
+      newNames = {
+        names: {x: this.state.names.x, y: this.state.name},
+        name: undefined,
+        currentInputID: undefined,
+        initialized: true
+      };
+    }
+    this.setState(newNames);
+  }
+
+  handleNameChange(event) {
+    this.setState({name: event.target.value});
   }
 
   render() {
     const winner = this.calculateWinner(this.state.marks);
     let status;
     if (winner) {
-      status = "The winner is: " + winner + "!!";
+      status = "The winner is: " + (winner === "X" ? this.state.names.x: this.state.names.y)  + "!!";
     } else if (this.state.initialized) {
-      status = "It is " + (this.state.xTurn ? "X": "O") + "'s turn.";
+      status = "It is " + (this.state.xTurn ? this.state.names.x: this.state.names.y) + "'s turn.";
     } else {
-      status = (
-        <form action={() => this.parseForm()}>
-          <label>
-            Player 1's name: 
-            <input type="text" name="playername" />
-          </label>
-        </form>);
+      status = <NameForm action={() => this.parseForm()} playerNo={this.state.currentInputID} name={this.state.name} onChange={(event) => this.handleNameChange(event)}/>;
     }
-
 
     return (
       <div className="App">
