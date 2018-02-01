@@ -43,15 +43,20 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      marks: new Array(9).fill(null)
-      //xturn = true;
+      marks: new Array(9).fill(null),
+      xTurn: true
     };
   }
 
   handleClick(i) {
-    let marks = this.state.marks.slice();
-    marks[i] = (marks[i] === "X" ? "O" : "X");
-    this.setState({marks : marks});
+    const marks = this.state.marks.slice();
+    if (marks[i] === null) {
+      marks[i] = this.state.xTurn ? "X" : "O";
+    }
+    this.setState({
+      marks: marks,
+      xTurn: !this.state.xTurn
+    });
   }
 
 
