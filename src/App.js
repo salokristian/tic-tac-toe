@@ -4,7 +4,7 @@ import "./App.css";
 class Cell extends Component {
   render() {
     return (
-      <button className="Cell" onClick={() => this.props.onClick()}>
+      <button className="Cell" onClick={this.props.onClick}>
         {this.props.mark}
       </button>      
     );
@@ -12,20 +12,8 @@ class Cell extends Component {
 }
 
 class Grid extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {marks: new Array(9).fill(null)};
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(i) {
-    let marks = this.state.marks.slice();
-    marks[i] = (marks[i] === "X" ? "O" : "X");
-    this.setState({marks : marks});
-  }
-
   renderCell(i) {
-    return (<Cell mark={this.state.marks[i]} onClick={() => this.handleClick(i)} />);
+    return (<Cell mark={this.props.marks[i]} onClick={() => this.props.onClick(i)} />);
   }
 
   render() {
@@ -54,7 +42,16 @@ class Grid extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {turn : "x"};
+    this.state = {
+      marks: new Array(9).fill(null)
+      //xturn = true;
+    };
+  }
+
+  handleClick(i) {
+    let marks = this.state.marks.slice();
+    marks[i] = (marks[i] === "X" ? "O" : "X");
+    this.setState({marks : marks});
   }
 
 
@@ -64,7 +61,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Tic-tac-toe</h1>
         </header>
-        <Grid />
+        <Grid marks={this.state.marks} onClick={(i) => this.handleClick(i)}/>
       </div>
     );
   }
