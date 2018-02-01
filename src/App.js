@@ -44,29 +44,74 @@ class App extends Component {
     super(props);
     this.state = {
       marks: new Array(9).fill(null),
-      xTurn: true
+      xTurn: true,
+      initialized: false
     };
   }
 
   handleClick(i) {
+    if (this.calculateWinner(this.state.marks)) {
+      return;
+    }
     const marks = this.state.marks.slice();
     if (marks[i] === null) {
       marks[i] = this.state.xTurn ? "X" : "O";
     }
-    this.setState({
+    this.setState(prevState => ({
       marks: marks,
-      xTurn: !this.state.xTurn
-    });
+      xTurn: !prevState.xTurn
+    }));
   }
 
+  calculateWinner(marks) { //function taken from react tutorials
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (marks[a] && marks[a] === marks[b] && marks[a] === marks[c]) {
+        return marks[a];
+      }
+    }
+    return null;
+  }
+
+  parseForm() {
+    return;
+  }
 
   render() {
+    const winner = this.calculateWinner(this.state.marks);
+    let status;
+    if (winner) {
+      status = "The winner is: " + winner + "!!";
+    } else if (this.state.initialized) {
+      status = "It is " + (this.state.xTurn ? "X": "O") + "'s turn.";
+    } else {
+      status = (
+        <form action={() => this.parseForm()}>
+          <label>
+            Player 1's name: 
+            <input type="text" name="playername" />
+          </label>
+        </form>);
+    }
+
+
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Tic-tac-toe</h1>
         </header>
         <Grid marks={this.state.marks} onClick={(i) => this.handleClick(i)}/>
+        <div className="App-infotext">{status}</div>
       </div>
     );
   }
