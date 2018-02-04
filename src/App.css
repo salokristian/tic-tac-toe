@@ -13,28 +13,21 @@
   font-size: 1.5em;
 }
 
-.App-grid {
-  text-align: center;
-  font-size: 5em;
+.Grid {
+  padding: 30px;
 }
 
 .Cell {
   background: #fff;
   border: 1px solid #999;
-  float: left;
+  vertical-align: top;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
-  width: 34px;
+  height: 68px;
+  width: 68px;
   margin-right: -1px;
   margin-top: -1px;
-  padding: 0;
   text-align: center;
 }
 
-.CellRow:after {
-  clear: both;
-  content: "";
-  display: table;
-}

@@ -18,7 +18,7 @@ class Grid extends Component {
 
   render() {
     return (
-      <div>
+      <div className="Grid">
         <div className="CellRow">
           {this.renderCell(0)}
           {this.renderCell(1)}
@@ -47,7 +47,7 @@ class NameForm extends Component {
         <label>
           Player {this.props.playerNo}'s name: 
           <input type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
-          <input type="button" onClick={() => this.props.action()} />
+          <input type="button" value="Add" onClick={() => this.props.action()} />
         </label>
       </div>
     );
