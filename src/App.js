@@ -47,7 +47,7 @@ class NameForm extends Component {
         <label>
           Player {this.props.playerNo}'s name: 
           <input type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
-          <input type="button" value="Add" onClick={() => this.props.action()} />
+          <input type="submit" value="Add" onClick={() => this.props.action()} />
         </label>
       </div>
     );
@@ -110,6 +110,11 @@ class App extends Component {
   }
 
   parseForm() {
+    if (this.state.name === "") {
+      alert("Please input name for Player " + this.state.currentInputID + ".");
+      return;
+    }
+
     var newNames;
     if (this.state.currentInputID === 1) {
       newNames = {
