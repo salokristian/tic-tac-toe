@@ -72,23 +72,21 @@ class App extends Component {
       return;
     }
 
+    const newState = {};
     const marks = this.state.marks.slice();
     if (marks[i] === null) {
       marks[i] = this.state.xTurn ? "X" : "O";
+      newState.marks = marks;
+      newState.xTurn = !this.state.xTurn;
     }
    
     const endStatus = this.calculateWinner(marks);
     if (marks.find(mark => mark === null) === undefined || endStatus !== null) {
-      this.setState({
-        endStatus: endStatus,
-        gameStatus: "finished"
-      });
+      newState.endStatus = endStatus;
+      newState.gameStatus = "finished";
     }
 
-    this.setState(prevState => ({
-      marks: marks,
-      xTurn: !prevState.xTurn
-    }));
+    this.setState(newState);
   }
 
   calculateWinner(marks) { //function taken from react tutorials
