@@ -60,7 +60,7 @@ class App extends Component {
     this.state = {
       marks: new Array(9).fill(null),
       xTurn: true,
-      initialized: false,
+      gameStatus: "uninitialized",
       name: "",
       names: {x: null, o: null},
       currentInputID: 1
@@ -68,13 +68,23 @@ class App extends Component {
   }
 
   handleClick(i) {
-    if (this.calculateWinner(this.state.marks)) {
+    if (this.state.gameStatus !== "ongoing") {
       return;
     }
+
     const marks = this.state.marks.slice();
     if (marks[i] === null) {
       marks[i] = this.state.xTurn ? "X" : "O";
     }
+   
+    const endStatus = this.calculateWinner(marks);
+    if (marks.find(mark => mark === null) === undefined || endStatus !== null) {
+      this.setState({
+        endStatus: endStatus,
+        gameStatus: "finished"
+      });
+    }
+
     this.setState(prevState => ({
       marks: marks,
       xTurn: !prevState.xTurn
@@ -114,7 +124,7 @@ class App extends Component {
         names: {x: this.state.names.x, y: this.state.name},
         name: undefined,
         currentInputID: undefined,
-        initialized: true
+        gameStatus: "ongoing"
       };
     }
     this.setState(newNames);
@@ -125,14 +135,23 @@ class App extends Component {
   }
 
   render() {
-    const winner = this.calculateWinner(this.state.marks);
     let status;
-    if (winner) {
-      status = "The winner is: " + (winner === "X" ? this.state.names.x: this.state.names.y)  + "!!";
-    } else if (this.state.initialized) {
+    switch (this.state.gameStatus) {
+    case "ongoing":
       status = "It is " + (this.state.xTurn ? this.state.names.x: this.state.names.y) + "'s turn.";
-    } else {
+      break;  
+    case  "uninitialized":
       status = <NameForm action={() => this.parseForm()} playerNo={this.state.currentInputID} name={this.state.name} onChange={(event) => this.handleNameChange(event)}/>;
+      break;
+    case "finished": //endStatus is only set if the game is finished
+      if (this.state.endStatus === null) {
+        status = "The game ended in a tie!";
+      } else {
+        status = "The winner is: " + (this.state.endStatus === "X" ? this.state.names.x: this.state.names.y)  + "!!";
+      }
+      break;
+    default:
+      alert("An unexpected error occured. Please reload the page.");
     }
 
     return (
