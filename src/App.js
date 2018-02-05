@@ -43,10 +43,10 @@ class NameForm extends Component {
 
   render() {
     return (
-      <div>
+      <div class="Form">
         <label>
-          Player {this.props.playerNo}'s name: 
-          <input type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
+          Player {this.props.playerNo}'s name:  
+          <input class="Form-text" type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
           <input type="submit" value="Add" onClick={() => this.props.action()} />
         </label>
       </div>
