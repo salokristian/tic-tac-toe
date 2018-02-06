@@ -46,7 +46,7 @@ class NameForm extends Component {
       <div class="Form">
         <label>
           Player {this.props.playerNo}'s name:  
-          <input class="Form-text" type="text" value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
+          <input class="Form-text" type="text" onKeyPress={this.props.keyPress} value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
           <input type="submit" value="Add" onClick={() => this.props.action()} />
         </label>
       </div>
@@ -137,6 +137,12 @@ class App extends Component {
     this.setState({name: event.target.value});
   }
 
+  handleKeyPress(event) {
+    if (event.charCode===13) {
+      this.parseForm();
+    }
+  }
+
   render() {
     let status;
     switch (this.state.gameStatus) {
@@ -144,7 +150,7 @@ class App extends Component {
       status = "It is " + (this.state.xTurn ? this.state.names.x: this.state.names.y) + "'s turn.";
       break;  
     case  "uninitialized":
-      status = <NameForm action={() => this.parseForm()} playerNo={this.state.currentInputID} name={this.state.name} onChange={(event) => this.handleNameChange(event)}/>;
+      status = <NameForm keyPress={(e) => this.handleKeyPress(e)} action={() => this.parseForm()} playerNo={this.state.currentInputID} name={this.state.name} onChange={(event) => this.handleNameChange(event)}/>;
       break;
     case "finished": //endStatus is only set if the game is finished
       if (this.state.endStatus === null) {
