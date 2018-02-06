@@ -193,7 +193,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Tic-tac-toe</h1>
+          <h1 className="App-title">Tic-Tac-Toe</h1>
         </header>
         <Grid marks={this.state.marks} onClick={(i) => this.handleClick(i)}/>
         <div className="App-infotext">{status}</div>
