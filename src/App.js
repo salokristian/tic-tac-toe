@@ -43,10 +43,10 @@ class NameForm extends Component {
 
   render() {
     return (
-      <div class="Form">
+      <div className="Form">
         <label>
           Player {this.props.playerNo}'s name:  
-          <input class="Form-text" type="text" onKeyPress={this.props.keyPress} value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
+          <input className="Form-text" type="text" onKeyPress={this.props.keyPress} value={this.props.name} onChange={(event) => this.props.onChange(event)}/>
           <input type="submit" value="Add" onClick={() => this.props.action()} />
         </label>
       </div>
@@ -143,6 +143,23 @@ class App extends Component {
     }
   }
 
+  playAgain(newPlayers) {
+    if (newPlayers) {
+      this.setState({
+        gameStatus: "uninitialized",
+        currentInputID: 1,
+        marks: new Array(9).fill(null),
+        name: "",
+        xTurn: true
+      });
+    } else {
+      this.setState({
+        gameStatus: "ongoing",
+        marks: new Array(9).fill(null)
+      });
+    }
+  }
+
   render() {
     let status;
     switch (this.state.gameStatus) {
@@ -153,11 +170,21 @@ class App extends Component {
       status = <NameForm keyPress={(e) => this.handleKeyPress(e)} action={() => this.parseForm()} playerNo={this.state.currentInputID} name={this.state.name} onChange={(event) => this.handleNameChange(event)}/>;
       break;
     case "finished": //endStatus is only set if the game is finished
+      var endStatus;
       if (this.state.endStatus === null) {
-        status = "The game ended in a tie!";
+        endStatus = "The game ended in a tie";
       } else {
-        status = "The winner is: " + (this.state.endStatus === "X" ? this.state.names.x: this.state.names.y)  + "!!";
+        endStatus = "The winner is: " + (this.state.endStatus === "X" ? this.state.names.x: this.state.names.y)  + "!!";
       }
+      status = (
+        <div>
+          {endStatus}
+          <div className="GameEndButtons">
+            <button type="button" onClick={() => this.playAgain(false)}>Play again</button>
+            <button type="button" onClick={() => this.playAgain(true)}>Input new players</button>
+          </div>
+        </div>
+      );
       break;
     default:
       alert("An unexpected error occured. Please reload the page.");

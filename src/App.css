@@ -39,3 +39,8 @@ html, body {
   margin-top: -1px;
 }
 
+.GameEndButtons * {
+  margin: 0.5%;
+  margin-top: 2%;
+}
+
